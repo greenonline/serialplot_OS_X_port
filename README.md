@@ -22,7 +22,9 @@ Built on:
 **Important Note**: Only run this script when *building* the application - it is not for general use.
 
  - Run from the directory containing `serialplot.app`,
-   - unless you change app_bundle_path to the full path, i.e. `/Users/username/qtcodeworkspace/serialplot`
+   - unless you change `app_bundle_path` to the full path, i.e. `/Users/username/qtcodeworkspace/serialplot`
+ - It expects the application bundle to be called `serialplot`
+   - unless you change `application` to a different name
  - Create the `serialplot.app/Contents/Frameworks` directory manually
    - if you plan to copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks` (i.e. the following step)
    - The directory will be created automatically (by the script) if it does not exist
