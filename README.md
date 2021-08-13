@@ -7,7 +7,7 @@ OS X binaries and scripts relating to [hyOzd](https://github.com/hyOzd)/[**seria
 
 The application works on OS X 10.13.6 (High Sierra). It is untested on other OS X verisons.
 
-Full documentation on the OS X build is on [Porting serialplot to OS X](https://gr33nonline.wordpress.com/2021/08/03/porting-serialplot-to-os-x/).  A shorter HOWTO is coming.
+Full documentation on the OS X build is on [Porting serialplot to OS X](https://gr33nonline.wordpress.com/2021/08/03/porting-serialplot-to-os-x/).  A shorter HOWTO is here [HOWTO: Port serialplot to OS X](https://gr33nonline.wordpress.com/2021/08/13/howto-port-serialplot-to-os-x/).
 
 Built on:
  - OS X 10.13.6
