@@ -1,5 +1,30 @@
 #!/bin/sh
 
+# Name: otool_serialplot_qwt_cocoa.sh
+#
+# - Run from the directory containing `serialplot.app`,
+#   - unless you change `app_bundle_path` to the full path, i.e. `/Users/username/qtcodeworkspace/serialplot`
+# - It expects the application bundle to be called `serialplot`
+#   - unless you change `application` to a different name
+# - Create the `serialplot.app/Contents/Frameworks` directory manually
+#   - if you plan to copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks` (i.e. the following step)
+#   - The directory will be created automatically (by the script) if it does not exist
+# - Copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks`, and run `install_name_tool -change qwt.framework/Versions/6/qwt @rpath/qwt.framework/Versions/6/qwt serialplot.app/Contents/MacOS/serialplot`
+#   - unless you set `do_qwt_copy` to `true`.
+#   - You may need to change `path_qwt` if the `qwt` source directory doesn't share the same parent folder as the directory containing the application bundle
+# - Copy the Qt frameworks over manually first to `serialplot.app/Contents/Frameworks`,
+#   - unless you set `do_copy` to `true`.
+# - Leave `do_id` as `false`
+#   - Setting the `-id` causes the application to crash (reason unknown)
+# - Leave `do_qwt` as `true`
+#   - This sets `qwt.framework` to point to the bundled Qt frameworks
+# - Leave `do_cocoa` as `true`
+#   - This copies over `libqcocoa.dylib` - if `do_copy` is `true`
+#   - This sets the Qt frameworks to point to `libqcocoa.dylib`
+# - `do_core` does nothing (yet)
+#   - It was meant for a test to leave `QtCore.framework` unbundled - to prevent the crash caused by the unbundled `libqcocoa.dylib`
+#   - Unimplemented
+
 # Paths (change these)
 
 application='serialplot'
@@ -72,11 +97,18 @@ install_name_tool -change ${lib_path_opt}/QtNetwork.framework/Versions/5/QtNetwo
 install_name_tool -change ${lib_path_opt}/QtCore.framework/Versions/5/QtCore @rpath/QtCore.framework/Versions/5/QtCore $app_binary_path
 
 
+# These three commands may not be required as the application binary does not call them directly, only via qwt
 if [ "X$do_qwt" = "Xtrue" ]
+#if [ "X$do_qwt" = "X666" ]  # Uncomment this line if you want to check if necessary or not - comment out previous line also
 then
   install_name_tool -change ${lib_path_opt}/QtConcurrent.framework/Versions/5/QtConcurrent @rpath/QtConcurrent.framework/Versions/5/QtConcurrent $app_binary_path
   install_name_tool -change ${lib_path_opt}/QtPrintSupport.framework/Versions/5/QtPrintSupport @rpath/QtPrintSupport.framework/Versions/5/QtPrintSupport $app_binary_path
   install_name_tool -change ${lib_path_opt}/QtOpenGL.framework/Versions/5/QtOpenGL @rpath/QtOpenGL.framework/Versions/5/QtOpenGL $app_binary_path
+fi
+
+if [ "X$do_qwt_copy" = "Xtrue" ]
+then
+  install_name_tool -change qwt.framework/Versions/6/qwt @rpath/qwt.framework/Versions/6/qwt $app_binary_path
 fi
 
 # Change QtGui
