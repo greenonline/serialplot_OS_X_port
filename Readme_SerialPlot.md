@@ -194,8 +194,19 @@ To make SerialPlot portable, the Qwt and Qt frameworks, upon which SerialPlot de
 
 See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) for further details.
 
+## Further build details
 
+An extensive build log is here, [SerialPlot - a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/)
 
+A brief HOWTO is here, [Compiling Qt SerialPlot (for OS X)](https://gr33nonline.wordpress.com/2021/08/03/compiling-qt-serialplot-for-os-x/), which is more or less the same as this [`README.md`]()
+
+# Known Issues
+
+Blah blah...
+
+# Further Work
+
+Blah blah...
 
   [1]: https://gr33nonline.files.wordpress.com/2021/07/serialplot-application-in-finder.png "Created binary"
   [2]: https://gr33nonline.files.wordpress.com/2021/07/four-qextserialport-libraries.png "Dynamic libraries to be copied"
