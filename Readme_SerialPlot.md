@@ -4,7 +4,7 @@ This is a graph plotting application that can be controlled from a serial port. 
 
 SerialPlot is graphing application that uses the serial port as a data source. An example of use is to replace the limited graphing facility built in to the Arduino IDE.
 
-It is built primarily for OS X, but may compile/build on Win32/64 and Linux, with a little coaxing.
+It is built primarily for OS X, but *may* compile/build on Win32/64 and Linux, with a little coaxing.
 
 # How to build SerialPlot?
 
@@ -196,9 +196,9 @@ See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) fo
 
 ## Further build details
 
-An extensive build log is here, [SerialPlot - a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/)
+An extensive build log is avaiable on the Gr33nonline blog, [SerialPlot - a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/)
 
-A brief HOWTO is here, [Compiling Qt SerialPlot (for OS X)](https://gr33nonline.wordpress.com/2021/08/03/compiling-qt-serialplot-for-os-x/), which is more or less the same as this [`README.md`]()
+A brief HOWTO is here, [Compiling Qt SerialPlot (for OS X)](https://gr33nonline.wordpress.com/2021/08/03/compiling-qt-serialplot-for-os-x/), which is more or less the same as this [`README.md`](https://github.com/pvd/SerialPlot/blob/main/README.md)
 
 # Known Issues
 
