@@ -1,7 +1,10 @@
 # What is SerialPlot?
 
+This is a graph plotting application that can be controlled from a serial port. This is a QT based application and currently only build & tested for OS X. I'm working on a Arduino library class that can control (add plots & samples) from the Arduino. Dependencies are QWT and qextserialport.
+
 SerialPlot is graphing application that uses the serial port as a data source. An example of use is to replace the limited graphing facility built in to the Arduino IDE.
-It is built primarily for OS X, but may work on Win32/64 and Linux, with a little coaxing.
+
+It is built primarily for OS X, but may compile/build on Win32/64 and Linux, with a little coaxing.
 
 # How to build SerialPlot?
 
