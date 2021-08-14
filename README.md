@@ -28,7 +28,7 @@ Built on:
  - Create the `serialplot.app/Contents/Frameworks` directory manually
    - if you plan to copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks` (i.e. the following step)
    - The directory will be created automatically (by the script) if it does not exist
- - Copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks`,
+ - Copy `qwt.framework` over manually first to `serialplot.app/Contents/Frameworks`, and run `install_name_tool -change qwt.framework/Versions/6/qwt @rpath/qwt.framework/Versions/6/qwt serialplot.app/Contents/MacOS/serialplot`
    - unless you set `do_qwt_copy` to `true`.
    - You may need to change `path_qwt` if the `qwt` source directory doesn't share the same parent folder as the directory containing the application bundle
  - Copy the Qt frameworks over manually first to `serialplot.app/Contents/Frameworks`,
@@ -36,7 +36,7 @@ Built on:
  - Leave `do_id` as `false`
    - Setting the `-id` causes the application to crash (reason unknown)
  - Leave `do_qwt` as `true`
-   - This sets the qwt.framework to point to the bundled Qt frameworks
+   - This sets `qwt.framework` to point to the bundled Qt frameworks
  - Leave `do_cocoa` as `true`
    - This copies over `libqcocoa.dylib` - if `do_copy` is `true`
    - This sets the Qt frameworks to point to `libqcocoa.dylib`
@@ -45,7 +45,7 @@ Built on:
    - Unimplemented
 
 
-[![][1]][1]
+[![serialplot running on OS X 10.13.6][1]][1]
 
 
-  [1]: https://gr33nonline.files.wordpress.com/2021/08/serialplot-ported-screenshot.png
+  [1]: https://gr33nonline.files.wordpress.com/2021/08/serialplot-ported-screenshot.png "serialplot running on OS X 10.13.6"
