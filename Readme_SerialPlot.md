@@ -171,7 +171,7 @@ Finally an application is created.
 
 [![Created binary][1]][1]
 
-However it crashes with the error:
+However, when double clicked, it crashes with the error:
 ```
 Dyld Error Message:
   Library not loaded: /usr/local/lib/libqextserialport.1.dylib
@@ -192,7 +192,7 @@ To make SerialPlot portable, the Qwt and Qt frameworks, upon which SerialPlot de
 
 *Details to follow...*
 
-See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html)
+See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) for further details.
 
 
 
