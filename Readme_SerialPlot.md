@@ -190,9 +190,22 @@ and then the application runs:
 
 To make SerialPlot portable, the Qwt and Qt frameworks, upon which SerialPlot depends, need to be bundled into the `SerialPlot.app` application bundle. 
 
+See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) for further details.
+
+This bundling of the frameworks can be done either manually, which I cover below, or by using purpose built script `bundleframeworks_SerialPlot.sh`. You *could* also use the [macdeployqt](https://doc.qt.io/qt-5/macos-deployment.html#the-mac-deployment-tool) command, which I am not going to cover here.
+
+### Bundle Qwt
+
 *Details to follow...*
 
-See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) for further details.
+### Bundle Qt frameworks
+
+*Details to follow...*
+
+### Bundle Cocoa platform plugin
+
+*Details to follow...*
+
 
 ## Further build details
 
