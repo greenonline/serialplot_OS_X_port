@@ -178,7 +178,7 @@ Dyld Error Message:
   Referenced from: /Users/USER/*/SerialPlot.app/Contents/MacOS/SerialPlot
   Reason: image not found
 ```
-Copy all four release (not debug) `.dylib` files from the `qexterialport` directory to `/usr/local/lib`
+Copy all four *release* (**not** debug) `.dylib` files from the `qexterialport` directory to `/usr/local/lib`
 
 [![Dynamic libraries to be copied][2]][2]
 
@@ -188,28 +188,98 @@ and then the application runs:
 
 ## Bundling the Qwt and Qt frameworks into SerialPlot
 
-To make SerialPlot portable, the Qwt and Qt frameworks, upon which SerialPlot depends, need to be bundled into the `SerialPlot.app` application bundle. 
+To make SerialPlot portable, the Qwt, QExtSerialPort and Qt frameworks, upon which SerialPlot depends, need to be bundled into the `SerialPlot.app` application bundle. 
 
 See [Qt for macOS - Deployment](https://doc.qt.io/qt-5/macos-deployment.html) for further details.
 
-This bundling of the frameworks can be done either manually, which I cover below, or by using purpose built script `bundleframeworks_SerialPlot.sh`. You *could* also use the [macdeployqt](https://doc.qt.io/qt-5/macos-deployment.html#the-mac-deployment-tool) command, which I am not going to cover here.
+This bundling of the frameworks can be done either manually, which I cover below, or by using the purpose built script `bundleframeworks_SerialPlot.sh`, which is in the `support/` directory on the Github repository. You *could* also use the [macdeployqt](https://doc.qt.io/qt-5/macos-deployment.html#the-mac-deployment-tool) command, which I am not going to cover here.
 
-### Bundle Qwt
+If you want an *explanation* as to why these commands are necessary then see the whole framework/library dependancy discovery process in the last section of [SerialPlot – a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/).
 
-*Details to follow...*
+### Preparation
 
+First we need to create a directory into which we will place the bundled frameworks and libraries.
+
+Either:
+
+ - in the Finder, right click the **SerialPlot** application and select **Show Package Contents**. Then in the `Contents/` folder, make a new folder called `Frameworks/`.
+ - in a terminal, type `mkdir SerialPlot.app/Contents/Frameworks`.
+
+### Bundle Qwt framework
+
+First copy in the `qwt.framework` into the newly created `SerialPlot.app/Contents/Frameworks` directory:
+```
+$ cp -R ../qwt/lib/qwt.framework SerialPlot.app/Contents/Frameworks
+```
+Change the reference for the application binary
+```
+$ install_name_tool -change qwt.framework/Versions/6/qwt @rpath/qwt.framework/Versions/6/qwt SerialPlot.app/Contents/MacOS/SerialPlot
+```
+### Bundle the QExtSerialPort library
+
+Copy the `qextserialport` library, all four *release* versions:
+```
+$ cp -R ../qextserialport/libqextserialport.dylib SerialPlot.app/Contents/Frameworks
+$ cp -R ../qextserialport/libqextserialport.1.dylib SerialPlot.app/Contents/Frameworks 
+$ cp -R ../qextserialport/libqextserialport.1.2.dylib SerialPlot.app/Contents/Frameworks 
+$ cp -R ../qextserialport/libqextserialport.1.2.0.dylib SerialPlot.app/Contents/Frameworks
+```
+Change the reference for the application binary
+```
+$ install_name_tool -change /usr/local/lib/libqextserialport.1.dylib @rpath/libqextserialport.1.dylib SerialPlot.app/Contents/MacOS/SerialPlot
+```
 ### Bundle Qt frameworks
 
-*Details to follow...*
+Copy the Qt frameworks
+```
+$ cp -R /Library/Frameworks/QtGui.framework SerialPlot.app/Contents/Frameworks 
+$ cp -R /Library/Frameworks/QtCore.framework SerialPlot.app/Contents/Frameworks
+$ cp -R /Library/Frameworks/QtCore.framework SerialPlot.app/Contents/Frameworks
+```
+Change the references for the application binary
+```
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtGui.framework/Versions/4/QtGui @rpath/QtGui.framework/Versions/4/QtGui SerialPlot.app/Contents/MacOS/SerialPlot
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtCore.framework/Versions/4/QtCore @rpath/QtCore.framework/Versions/4/QtCore SerialPlot.app/Contents/MacOS/SerialPlot
+```
+**Note**: We don't need to do it for QtSvg as it is `qwt` that calls it, *not* the application binary.
+
+Change the reference names for `qwt`
+```
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtCore.framework/Versions/4/QtCore @rpath/QtCore.framework/Versions/4/QtCore SerialPlot.app/Contents/Frameworks/qwt.framework/Versions/6/qwt 
+
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtGui.framework/Versions/4/QtGui @rpath/QtGui.framework/Versions/4/QtGui SerialPlot.app/Contents/Frameworks/qwt.framework/Versions/6/qwt 
+
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtSvg.framework/Versions/4/QtSvg @rpath/QtSvg.framework/Versions/4/QtSvg SerialPlot.app/Contents/Frameworks/qwt.framework/Versions/6/qwt
+```
+Change the reference name for `libqextserialport`
+```
+$ install_name_tool -change /usr/local/opt/qt@4/lib/QtCore.framework/Versions/4/QtCore @rpath/QtCore.framework/Versions/4/QtCore SerialPlot.app/Contents/Frameworks/libqextserialport.1.dylib
+```
+Change the reference name for QtGui
+```
+$ install_name_tool -change /usr/local/Cellar/qt@4/4.8.7_6/lib/QtCore.framework/Versions/4/QtCore @rpath/QtCore.framework/Versions/4/QtCore SerialPlot.app/Contents/Frameworks/QtGui.framework/Versions/4/QtGui
+```
+Change the reference names for QtSvg
+```
+$ install_name_tool -change /usr/local/Cellar/qt@4/4.8.7_6/lib/QtCore.framework/Versions/4/QtCore @rpath/QtCore.framework/Versions/4/QtCore SerialPlot.app/Contents/Frameworks/QtSvg.framework/Versions/4/QtSvg $ install_name_tool -change /usr/local/Cellar/qt@4/4.8.7_6/lib/QtGui.framework/Versions/4/QtGui @rpath/QtGui.framework/Versions/4/QtGui SerialPlot.app/Contents/Frameworks/QtSvg.framework/Versions/4/QtSvg
+```
+Optional: If you want to perform a sanity check to ensure that all of the frameworks use `@rpath` then run the following:
+```
+$ otool -L SerialPlot.app/Contents/Resources/MacOS/SerialPlot 
+$ otool -L SerialPlot.app/Contents/Frameworks/qwt.framework/Versions/6/qwt $ otool -L SerialPlot.app/Contents/Frameworks/libqextserialport.1.dylib 
+$ otool -L SerialPlot.app/Contents/Frameworks/QtSvg.framework/Versions/4/QtSvg 
+$ otool -L SerialPlot.app/Contents/Frameworks/QtGui.framework/Versions/4/QtGui 
+$ otool -L SerialPlot.app/Contents/Frameworks/QtCore.framework/Versions/4/QtCore
+```
+That's it!!! The bundling is now complete and the application *should* now be portable.
 
 ### Bundle Cocoa platform plugin
 
-*Details to follow...*
-
+**Note**: Unlike Qt5, there doesn't seem to be a libqcocoa.dylib library.
 
 ## Further build details
 
-An extensive build log is avaiable on the Gr33nonline blog, [SerialPlot - a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/)
+An extensive build log is avaiable on the *Gr33nonline* blog, [SerialPlot - a Qt adventure on OS X](https://gr33nonline.wordpress.com/2021/07/25/serialplot-a-qt-adventure-on-os-x/)
 
 A brief HOWTO is here, [Compiling Qt SerialPlot (for OS X)](https://gr33nonline.wordpress.com/2021/08/03/compiling-qt-serialplot-for-os-x/), which is more or less the same as this [`README.md`](https://github.com/pvd/SerialPlot/blob/main/README.md)
 
